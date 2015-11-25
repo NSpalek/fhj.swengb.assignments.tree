@@ -1,9 +1,10 @@
-package fhj.swengb.assignments.tree.rladstaetter
+package fhj.swengb.assignments.tree.nspalek
 
 import javafx.scene.paint.Color
 
 import scala.math.BigDecimal.RoundingMode
 import scala.util.Random
+import scala.math.{BigDecimal => bd}
 
 object Graph {
 
@@ -29,6 +30,9 @@ object Graph {
   def randomTree(pt: Pt2D): Tree[L2D] =
     mkGraph(pt, Random.nextInt(360), Random.nextDouble() * 150, Random.nextInt(7))
 
+  //mkGraph(start point, angle, length, depth)
+  // start point with x and y
+
 
   /**
     * Given a Tree of L2D's and a function which can convert any L2D to a Line,
@@ -40,13 +44,14 @@ object Graph {
     * @return
     */
   def traverse[A, B](tree: Tree[A])(convert: A => B): Seq[B] = {
-  ???
+    ???
+    //map
   }
 
   /**
     * Creates a tree graph.
     *
-    * @param start the startpoint (root) of the tree
+    * @param start the startpoint (root) of the tree (x and y)
     * @param initialAngle initial angle of the tree
     * @param length the initial length of the tree
     * @param treeDepth the depth of the tree
@@ -56,14 +61,22 @@ object Graph {
     *
     * @return a Tree[L2D] which can be traversed by other algorithms
     */
-  def mkGraph(start: Pt2D,
-              initialAngle: AngleInDegrees,
-              length: Double,
-              treeDepth: Int,
-              factor: Double = 0.75,
-              angle: Double = 45.0,
-              colorMap: Map[Int, Color] = Graph.colorMap): Tree[L2D] = {
+  def mkGraph(start: Pt2D, initialAngle: AngleInDegrees, length: Double, treeDepth: Int,
+              factor: Double = 0.75, angle: Double = 45.0, colorMap: Map[Int, Color] = Graph.colorMap): Tree[L2D] = {
+
     assert(treeDepth <= colorMap.size, s"Treedepth higher than color mappings - bailing out ...")
+
+
+    //implement actions for the cases
+    def buildGraph(start:Pt2D, accumulator: Int): Tree[L2D] = accumulator match {
+        case start if treeDepth == 0 => ???
+        case node if accumulator == treeDepth => ???
+        case _ => ???
+      }
+
+    val accumulator = 1
+    //implement L2D
+    //buildGraph(L2D(start,initialAngle,length,colorMap(accumulator - 1)), accumulator)
     ???
  }
 
@@ -78,7 +91,7 @@ object MathUtil {
     * @return
     */
   def round(value: Double): Double = {
-    ???
+    bd(value).setScale(3, bd.RoundingMode.HALF_UP).toDouble
   }
 
   /**
@@ -88,7 +101,7 @@ object MathUtil {
     * @return
     */
   def toRadiants(angle: AngleInDegrees): AngleInRadiants = {
-   ???
+    angle.toRadians
   }
 }
 
@@ -108,7 +121,9 @@ object L2D {
     * @return
     */
   def apply(start: Pt2D, angle: AngleInDegrees, length: Double, color: Color): L2D = {
-    ???
+    //x and y of end point have to be calculated
+    val endpoint = Pt2D(x,y)
+    L2D(start, endpoint , color)
   }
 
 
