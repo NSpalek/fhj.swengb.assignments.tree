@@ -43,9 +43,10 @@ object Graph {
     * @param convert a converter function
     * @return
     */
-  def traverse[A, B](tree: Tree[A])(convert: A => B): Seq[B] = {
-    ???
-    //map
+  def traverse[A, B](tree: Tree[A])(convert: A => B): Seq[B] = tree match {
+    case Branch(left, right) => traverse(left)(convert)++ traverse(right)(convert)
+    case Node(value) => Seq(convert(value))
+
   }
 
   /**
@@ -68,16 +69,18 @@ object Graph {
 
 
     //implement actions for the cases
-    def buildGraph(start:Pt2D, accumulator: Int): Tree[L2D] = accumulator match {
-        case start if treeDepth == 0 => ???
-        case node if accumulator == treeDepth => ???
-        case _ => ???
+    def buildGraph(start:L2D, accumulator: Int): Tree[L2D] = accumulator match {
+        case startpoint if treeDepth == 0 => Node(start)
+
+        case node if accumulator == treeDepth => Branch(Node(start),Branch(Node(start.left(factor,angle,colorMap(accumulator-  1))),
+                                                                           Node(start.right(factor,angle,colorMap(accumulator - 1)))))
+
+        case _ => Branch(Node(start),Branch(buildGraph(start.left(factor,angle,colorMap(accumulator - 1)), accumulator + 1),
+                         buildGraph(start.right(factor,angle,colorMap(accumulator - 1)), accumulator + 1)))
       }
 
     val accumulator = 1
-    //implement L2D
-    //buildGraph(L2D(start,initialAngle,length,colorMap(accumulator - 1)), accumulator)
-    ???
+    buildGraph(L2D.apply(start,initialAngle,length,colorMap(accumulator - 1)), accumulator)
  }
 
 }
@@ -121,11 +124,9 @@ object L2D {
     * @return
     */
   def apply(start: Pt2D, angle: AngleInDegrees, length: Double, color: Color): L2D = {
-    //x and y of end point have to be calculated
-    val endpoint = Pt2D(x,y)
+    val endpoint = Pt2D(round(Math.cos(toRadiants(angle)) * length) + start.x , round(Math.sin(toRadiants(angle)) * length) + start.y)
     L2D(start, endpoint , color)
   }
-
 
 }
 
